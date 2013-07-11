@@ -4,6 +4,7 @@ package Plack::Test::Simple;
 use HTTP::Request;
 use HTTP::Response;
 use URI;
+use Plack::Util;
 use Plack::Test qw(test_psgi);
 use Data::DPath qw(dpath);
 use JSON qw(decode_json);
@@ -22,7 +23,8 @@ use utf8;
     my $res = $t->response;
 
     # setup
-    $req->header->content_type('application/json');
+    $req->headers->authorization_basic('h@cker', 's3cret');
+    $req->headers->content_type('application/json');
 
     # text request
     $t->can_get('/search')->status_is(200);
@@ -69,13 +71,18 @@ sub _build_data {
 
 has psgi => (
     is     => 'rw',
+    isa    => sub {
+        my $psgi = shift;
+
+        die 'The psgi attribute must must be a valid PSGI filepath or code '.
+            'reference' if !$psgi && ('CODE' eq ref($psgi) xor -f $psgi);
+    },
     coerce => sub {
         my $psgi = shift;
-        die 'The psgi attribute must must be a valid PSGI filepath '.
-            'or code reference' unless 'CODE' eq ref($psgi) xor -f $psgi;
 
+        # return psgi
         return $psgi if ref $psgi;
-        return require $psgi;
+        return Plack::Util::load_psgi($psgi);
     }
 );
 

@@ -26,6 +26,7 @@ my %WriteMakefileArgs = (
     "HTTP::Response" => 0,
     "JSON" => 0,
     "Moo" => 0,
+    "Plack" => 0,
     "Plack::Test" => 0,
     "Test::More" => 0,
     "URI" => 0

@@ -3,8 +3,22 @@ Changes from 2012-07-11 00:00:00 +0000 to present.
 ==================================================
 
 ---------------------------------------------
-version 0.000001 at 2013-07-11 03:14:53 +0000
+version 0.000001 at 2013-07-11 05:48:44 +0000
 ---------------------------------------------
+
+  Change: cc2134aadafa3cbe06c888c84c50492b3a26cbf7
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-11 01:42:33 +0000
+
+    refactored how psgi apps are loaded
+
+    refactored how psgi apps are loaded 
+
+  Change: a836119117c66481365a92f0a18b2bf45db5eb30
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-10 23:15:11 +0000
+
+    updated dist.ini 
 
   Change: 842bbe172445d2815e0760bf97c1265eb110df15
   Author: Al Newkirk <anewkirk@ana.io>

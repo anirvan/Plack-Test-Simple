@@ -22,7 +22,8 @@ SYNOPSIS
         my $res = $t->response;
 
         # setup
-        $req->header->content_type('application/json');
+        $req->headers->authorization_basic('h@cker', 's3cret');
+        $req->headers->content_type('application/json');
 
         # text request
         $t->can_get('/search')->status_is(200);
