@@ -1,0 +1,44 @@
+NAME
+    Plack::Test::Simple - Object-Oriented PSGI Application Testing
+
+VERSION
+    version 0.000001
+
+SYNOPSIS
+    Plack::Test::Simple is a collection of testing helpers for anyone
+    developing Plack applications. This module is a wrapper around
+    Plack::Test, based on the design of Test::Mojo, providing a unified
+    interface to test PSGI applications using HTTP::Request and
+    HTTP::Response objects. Typically a Plack web application's deployment
+    stack includes various middlewares and utilities which are now even
+    easier to test along-side the actual web application code.
+
+SYNOPSIS
+        use Test::More;
+        use Plack::Test::Simple;
+
+        my $t   = Plack::Test::Simple->new('/path/to/app.psgi');
+        my $req = $t->request;
+        my $res = $t->response;
+
+        # setup
+        $req->header->content_type('application/json');
+
+        # text request
+        $t->can_get('/search')->status_is(200);
+
+        # json request
+        $t->can_post('/search')->status_is(200);
+        $t->data_has('/results/4/title');
+
+        done_testing;
+
+AUTHOR
+    Al Newkirk <anewkirk@ana.io>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2013 by Al Newkirk.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
