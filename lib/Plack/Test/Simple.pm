@@ -53,6 +53,13 @@ sub BUILDARGS {
     return {@args};
 }
 
+=attribute data
+
+The data attribute contains a hashref corresponding to the UTF-8 decoded JSON
+string found in the HTTP response body.
+
+=cut
+
 has data => (
     is      => 'rw',
     lazy    => 1,
@@ -68,6 +75,13 @@ sub _build_data {
     # only supporting JSON data currently !!!
     return decode_json $self->response->decoded_content;
 }
+
+=attribute psgi
+
+The psgi attribute contains a coderef containing the PSGI compliant application
+code.
+
+=cut
 
 has psgi => (
     is     => 'rw',
@@ -86,6 +100,13 @@ has psgi => (
     }
 );
 
+=attribute request
+
+The request attribute contains the L<HTTP::Request> object which will be used
+to process the HTTP requests. This attribute is never reset.
+
+=cut
+
 has request => (
     is      => 'rw',
     lazy    => 1,
@@ -98,6 +119,14 @@ sub _build_request {
     )
 }
 
+=attribute response
+
+The response attribute contains the L<HTTP::Response> object which will be
+automatically set upon issuing an HTTP requests. This attribute is reset upon
+each request.
+
+=cut
+
 has response => (
     is      => 'rw',
     lazy    => 1,
@@ -107,6 +136,16 @@ has response => (
 sub _build_response {
     return HTTP::Response->new
 }
+
+=method can_get
+
+The can_get method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_get('/users');
+    $self->can_get('/users' => 'http get /users ok');
+
+=cut
 
 sub can_get {
     my ($self, $path, $desc) = @_;
@@ -118,6 +157,16 @@ sub can_get {
     return $self;
 }
 
+=method cant_get
+
+The cant_get method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_get('/');
+    $self->cant_get('/users' => 'http get /users not ok');
+
+=cut
+
 sub cant_get {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('GET', $path);
@@ -127,6 +176,16 @@ sub cant_get {
 
     return $self;
 }
+
+=method can_post
+
+The can_post method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_post('/users');
+    $self->can_post('/users' => 'http post /users ok');
+
+=cut
 
 sub can_post {
     my ($self, $path, $desc) = @_;
@@ -138,6 +197,16 @@ sub can_post {
     return $self;
 }
 
+=method cant_post
+
+The cant_post method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_post('/users');
+    $self->cant_post('/users' => 'http post /users not ok');
+
+=cut
+
 sub cant_post {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('POST', $path);
@@ -147,6 +216,16 @@ sub cant_post {
 
     return $self;
 }
+
+=method can_put
+
+The can_put method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_put('/users');
+    $self->can_put('/users' => 'http put /users ok');
+
+=cut
 
 sub can_put {
     my ($self, $path, $desc) = @_;
@@ -158,6 +237,16 @@ sub can_put {
     return $self;
 }
 
+=method cant_put
+
+The cant_put method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_put('/users');
+    $self->cant_put('/users' => 'http put /users not ok');
+
+=cut
+
 sub cant_put {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('PUT', $path);
@@ -167,6 +256,16 @@ sub cant_put {
 
     return $self;
 }
+
+=method can_delete
+
+The can_delete method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_delete('/users');
+    $self->can_delete('/users' => 'http delete /users ok');
+
+=cut
 
 sub can_delete {
     my ($self, $path, $desc) = @_;
@@ -178,6 +277,16 @@ sub can_delete {
     return $self;
 }
 
+=method cant_delete
+
+The cant_delete method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_delete('/users');
+    $self->cant_delete('/users' => 'http delete /users not ok');
+
+=cut
+
 sub cant_delete {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('DELETE', $path);
@@ -187,6 +296,16 @@ sub cant_delete {
 
     return $self;
 }
+
+=method can_head
+
+The can_head method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_head('/users');
+    $self->can_head('/users' => 'http head /users ok');
+
+=cut
 
 sub can_head {
     my ($self, $path, $desc) = @_;
@@ -198,6 +317,16 @@ sub can_head {
     return $self;
 }
 
+=method cant_head
+
+The cant_head method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_head('/users');
+    $self->cant_head('/users' => 'http head /users ok');
+
+=cut
+
 sub cant_head {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('HEAD', $path);
@@ -207,6 +336,16 @@ sub cant_head {
 
     return $self;
 }
+
+=method can_options
+
+The can_options method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->can_options('/users');
+    $self->can_options('/users' => 'http options /users ok');
+
+=cut
 
 sub can_options {
     my ($self, $path, $desc) = @_;
@@ -218,6 +357,16 @@ sub can_options {
     return $self;
 }
 
+=method cant_options
+
+The cant_options method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->cant_options('/users');
+    $self->cant_options('/users' => 'http options /users not ok');
+
+=cut
+
 sub cant_options {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('OPTIONS', $path);
@@ -227,6 +376,16 @@ sub cant_options {
 
     return $self;
 }
+
+=method can_trace
+
+The can_trace method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->can_trace('/users');
+    $self->can_trace('/users' => 'http trace /users ok');
+
+=cut
 
 sub can_trace {
     my ($self, $path, $desc) = @_;
@@ -238,6 +397,16 @@ sub can_trace {
     return $self;
 }
 
+=method cant_trace
+
+The cant_trace method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->cant_trace('/users');
+    $self->cant_trace('/users' => 'http trace /users not ok');
+
+=cut
+
 sub cant_trace {
     my ($self, $path, $desc) = @_;
     my $res = $self->_http_request('TRACE', $path);
@@ -248,6 +417,12 @@ sub cant_trace {
     return $self;
 }
 
+=method content_is
+
+The content_is method tests ...
+
+=cut
+
 sub content_is {
     my ($self, $value, $desc) = @_;
     $desc ||= 'exact match for content';
@@ -255,6 +430,12 @@ sub content_is {
         'is', $self->request->decoded_content, $value, $desc
     );
 }
+
+=method content_isnt
+
+The content_isnt method tests ...
+
+=cut
 
 sub content_isnt {
     my ($self, $value, $desc) = @_;
@@ -264,6 +445,12 @@ sub content_isnt {
     );
 }
 
+=method content_like
+
+The content_like method tests ...
+
+=cut
+
 sub content_like {
     my ($self, $regex, $desc) = @_;
     $desc ||= 'content is similar';
@@ -272,6 +459,12 @@ sub content_like {
     );
 }
 
+=method content_unlike
+
+The content_unlike method tests ...
+
+=cut
+
 sub content_unlike {
     my ($self, $regex, $desc) = @_;
     $desc ||= 'content is not similar';
@@ -279,6 +472,12 @@ sub content_unlike {
         'unlike', $self->request->decoded_content, $regex, $desc
     );
 }
+
+=method content_type_is
+
+The content_type_is method tests ...
+
+=cut
 
 sub content_type_is {
     my ($self, $type, $desc) = @_;
@@ -289,6 +488,12 @@ sub content_type_is {
     );
 }
 
+=method content_type_isnt
+
+The content_type_isnt method tests ...
+
+=cut
+
 sub content_type_isnt {
     my ($self, $type, $desc) = @_;
     my $name = 'Content-Type';
@@ -297,6 +502,12 @@ sub content_type_isnt {
         'is', $self->request->header($name), $type, $desc
     );
 }
+
+=method content_type_like
+
+The content_type_like method tests ...
+
+=cut
 
 sub content_type_like {
     my ($self, $regex, $desc) = @_;
@@ -307,6 +518,12 @@ sub content_type_like {
     );
 }
 
+=method content_type_unlike
+
+The content_type_unlike method tests ...
+
+=cut
+
 sub content_type_unlike {
     my ($self, $regex, $desc) = @_;
     my $name = 'Content-Type';
@@ -316,6 +533,12 @@ sub content_type_unlike {
     );
 }
 
+=method header_is
+
+The header_is method tests ...
+
+=cut
+
 sub header_is {
     my ($self, $name, $value, $desc) = @_;
     $desc ||= "$name: " . ($value ? $value : '');
@@ -323,6 +546,12 @@ sub header_is {
         'is', $self->request->header($name), $value, $desc
     );
 }
+
+=method header_isnt
+
+The header_isnt method tests ...
+
+=cut
 
 sub header_isnt {
     my ($self, $name, $value, $desc) = @_;
@@ -332,6 +561,12 @@ sub header_isnt {
     );
 }
 
+=method header_like
+
+The header_like method tests ...
+
+=cut
+
 sub header_like {
     my ($self, $name, $regex, $desc) = @_;
     $desc ||= "$name is similar";
@@ -340,6 +575,12 @@ sub header_like {
     );
 }
 
+=method header_unlike
+
+The header_unlike method tests ...
+
+=cut
+
 sub header_unlike {
     my ($self, $name, $regex, $desc) = @_;
     $desc ||= "$name is not similar";
@@ -347,6 +588,12 @@ sub header_unlike {
         'unlike', $self->request->header($name), $regex, $desc
     );
 }
+
+=method data_has
+
+The data_has method tests ...
+
+=cut
 
 sub data_has {
     my ($self, $path, $desc) = @_;
@@ -357,6 +604,12 @@ sub data_has {
     );
 }
 
+=method data_hasnt
+
+The data_hasnt method tests ...
+
+=cut
+
 sub data_hasnt {
     my ($self, $path, $desc) = @_;
     $desc ||= qq{has no value for data path "$path"};
@@ -365,6 +618,12 @@ sub data_hasnt {
         'ok', !$rs->[0], $desc
     );
 }
+
+=method data_is_deeply
+
+The data_is_deeply method tests ...
+
+=cut
 
 sub data_is_deeply {
     my $self = shift;
@@ -377,6 +636,22 @@ sub data_is_deeply {
     );
 }
 
+=method data_match
+
+The data_match method tests ...
+
+=cut
+
+sub data_match {
+    goto data_is_deeply;
+}
+
+=method status_is
+
+The status_is method tests ...
+
+=cut
+
 sub status_is {
     my ($self, $code, $desc) = @_;
     $desc ||= "status is $code";
@@ -384,6 +659,12 @@ sub status_is {
         'is', $self->response->code, $code, $desc
     );
 }
+
+=method status_isnt
+
+The status_isnt method tests ...
+
+=cut
 
 sub status_isnt {
     my ($self, $code, $desc) = @_;

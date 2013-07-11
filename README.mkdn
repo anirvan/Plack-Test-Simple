@@ -37,6 +37,215 @@ are now even easier to test along-side the actual web application code.
 
     done_testing;
 
+# ATTRIBUTES
+
+## data
+
+The data attribute contains a hashref corresponding to the UTF-8 decoded JSON
+string found in the HTTP response body.
+
+## psgi
+
+The psgi attribute contains a coderef containing the PSGI compliant application
+code.
+
+## request
+
+The request attribute contains the [HTTP::Request](http://search.cpan.org/perldoc?HTTP::Request) object which will be used
+to process the HTTP requests. This attribute is never reset.
+
+## response
+
+The response attribute contains the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) object which will be
+automatically set upon issuing an HTTP requests. This attribute is reset upon
+each request.
+
+# METHODS
+
+## can\_get
+
+The can\_get method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_get('/users');
+    $self->can_get('/users' => 'http get /users ok');
+
+## cant\_get
+
+The cant\_get method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_get('/');
+    $self->cant_get('/users' => 'http get /users not ok');
+
+## can\_post
+
+The can\_post method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_post('/users');
+    $self->can_post('/users' => 'http post /users ok');
+
+## cant\_post
+
+The cant\_post method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_post('/users');
+    $self->cant_post('/users' => 'http post /users not ok');
+
+## can\_put
+
+The can\_put method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_put('/users');
+    $self->can_put('/users' => 'http put /users ok');
+
+## cant\_put
+
+The cant\_put method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_put('/users');
+    $self->cant_put('/users' => 'http put /users not ok');
+
+## can\_delete
+
+The can\_delete method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_delete('/users');
+    $self->can_delete('/users' => 'http delete /users ok');
+
+## cant\_delete
+
+The cant\_delete method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_delete('/users');
+    $self->cant_delete('/users' => 'http delete /users not ok');
+
+## can\_head
+
+The can\_head method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->can_head('/users');
+    $self->can_head('/users' => 'http head /users ok');
+
+## cant\_head
+
+The cant\_head method tests whether an HTTP request to the supplied path is a
+success.
+
+    $self->cant_head('/users');
+    $self->cant_head('/users' => 'http head /users ok');
+
+## can\_options
+
+The can\_options method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->can_options('/users');
+    $self->can_options('/users' => 'http options /users ok');
+
+## cant\_options
+
+The cant\_options method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->cant_options('/users');
+    $self->cant_options('/users' => 'http options /users not ok');
+
+## can\_trace
+
+The can\_trace method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->can_trace('/users');
+    $self->can_trace('/users' => 'http trace /users ok');
+
+## cant\_trace
+
+The cant\_trace method tests whether an HTTP request to the supplied path is
+a success.
+
+    $self->cant_trace('/users');
+    $self->cant_trace('/users' => 'http trace /users not ok');
+
+## content\_is
+
+The content\_is method tests ...
+
+## content\_isnt
+
+The content\_isnt method tests ...
+
+## content\_like
+
+The content\_like method tests ...
+
+## content\_unlike
+
+The content\_unlike method tests ...
+
+## content\_type\_is
+
+The content\_type\_is method tests ...
+
+## content\_type\_isnt
+
+The content\_type\_isnt method tests ...
+
+## content\_type\_like
+
+The content\_type\_like method tests ...
+
+## content\_type\_unlike
+
+The content\_type\_unlike method tests ...
+
+## header\_is
+
+The header\_is method tests ...
+
+## header\_isnt
+
+The header\_isnt method tests ...
+
+## header\_like
+
+The header\_like method tests ...
+
+## header\_unlike
+
+The header\_unlike method tests ...
+
+## data\_has
+
+The data\_has method tests ...
+
+## data\_hasnt
+
+The data\_hasnt method tests ...
+
+## data\_is\_deeply
+
+The data\_is\_deeply method tests ...
+
+## data\_match
+
+The data\_match method tests ...
+
+## status\_is
+
+The status\_is method tests ...
+
+## status\_isnt
+
+The status\_isnt method tests ...
+
 # AUTHOR
 
 Al Newkirk <anewkirk@ana.io>
