@@ -3,8 +3,14 @@ Changes from 2012-07-12 00:00:00 +0000 to present.
 ==================================================
 
 ---------------------------------------------
-version 0.000001 at 2013-07-12 08:03:24 +0000
+version 0.000001 at 2013-07-12 08:05:17 +0000
 ---------------------------------------------
+
+  Change: 2edb972393e3f1b3163e2fccb0ce8a9cfd32f188
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-12 04:05:05 +0000
+
+    fixed common issue with test methods, updated documentation 
 
   Change: 4e561a72071609ab03f219994091cbea70530d68
   Author: Al Newkirk <anewkirk@ana.io>
