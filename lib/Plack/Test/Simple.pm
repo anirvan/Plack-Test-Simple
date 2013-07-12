@@ -7,7 +7,7 @@ use URI;
 use Plack::Util;
 use Plack::Test qw(test_psgi);
 use Data::DPath qw(dpath);
-use JSON qw(decode_json);
+use JSON qw(encode_json decode_json);
 use Test::More ();
 use Moo;
 
@@ -25,11 +25,13 @@ use utf8;
     # setup
     $req->headers->authorization_basic('h@cker', 's3cret');
     $req->headers->content_type('application/json');
+    $req->content('');
 
-    # text request
-    $t->can_get('/search')->status_is(200);
+    # text GET request
+    $t->can_get('/')->status_is(200);
+    $t->content_like(qr/hello world/i);
 
-    # json request
+    # json POST request
     $t->can_post('/search')->status_is(200);
     $t->data_has('/results/4/title');
 
@@ -419,7 +421,11 @@ sub cant_trace {
 
 =method content_is
 
-The content_is method tests ...
+The content_is method tests if the L<HTTP::Response> decoded body matches the
+value specified.
+
+    $self->content_is($value);
+    $self->content_is($value => 'body ok');
 
 =cut
 
@@ -427,13 +433,17 @@ sub content_is {
     my ($self, $value, $desc) = @_;
     $desc ||= 'exact match for content';
     return $self->_test_more(
-        'is', $self->request->decoded_content, $value, $desc
+        'is', $self->response->decoded_content, $value, $desc
     );
 }
 
 =method content_isnt
 
-The content_isnt method tests ...
+The content_isnt method tests if the L<HTTP::Response> decoded body does not
+match the value specified.
+
+    $self->content_isnt($value);
+    $self->content_isnt($value => 'body not ok');
 
 =cut
 
@@ -441,13 +451,17 @@ sub content_isnt {
     my ($self, $value, $desc) = @_;
     $desc ||= 'no match for content';
     return $self->_test_more(
-        'isnt', $self->request->decoded_content, $value, $desc
+        'isnt', $self->response->decoded_content, $value, $desc
     );
 }
 
 =method content_like
 
-The content_like method tests ...
+The content_like method tests if the L<HTTP::Response> decoded body contains
+matches for the regex value specified.
+
+    $self->content_like(qr/body/);
+    $self->content_like(qr/body/ => 'body found');
 
 =cut
 
@@ -455,13 +469,17 @@ sub content_like {
     my ($self, $regex, $desc) = @_;
     $desc ||= 'content is similar';
     return $self->_test_more(
-        'like', $self->request->decoded_content, $regex, $desc
+        'like', $self->response->decoded_content, $regex, $desc
     );
 }
 
 =method content_unlike
 
-The content_unlike method tests ...
+The content_unlike method tests if the L<HTTP::Response> decoded body does not
+contain matches for the regex value specified.
+
+    $self->content_isnt(qr/body/);
+    $self->content_is(qr/body/ => 'body not found');
 
 =cut
 
@@ -469,13 +487,17 @@ sub content_unlike {
     my ($self, $regex, $desc) = @_;
     $desc ||= 'content is not similar';
     return $self->_test_more(
-        'unlike', $self->request->decoded_content, $regex, $desc
+        'unlike', $self->response->decoded_content, $regex, $desc
     );
 }
 
 =method content_type_is
 
-The content_type_is method tests ...
+The content_type_is method tests if the L<HTTP::Response> Content-Type header
+matches the value specified.
+
+    $self->content_type_is('application/json');
+    $self->content_type_is('application/json' => 'json data returned');
 
 =cut
 
@@ -484,13 +506,17 @@ sub content_type_is {
     my $name = 'Content-Type';
     $desc ||= "$name: $type";
     return $self->_test_more(
-        'is', $self->request->header($name), $type, $desc
+        'is', $self->response->header($name), $type, $desc
     );
 }
 
 =method content_type_isnt
 
-The content_type_isnt method tests ...
+The content_type_isnt method tests if the L<HTTP::Response> Content-Type
+header does not match the value specified.
+
+    $self->content_type_isnt('application/json');
+    $self->content_type_isnt('application/json' => 'json data not returned');
 
 =cut
 
@@ -499,13 +525,17 @@ sub content_type_isnt {
     my $name = 'Content-Type';
     $desc ||= "not $name: $type";
     return $self->_test_more(
-        'is', $self->request->header($name), $type, $desc
+        'is', $self->response->header($name), $type, $desc
     );
 }
 
 =method content_type_like
 
-The content_type_like method tests ...
+The content_type_like method tests if the L<HTTP::Response> Content-Type
+header contains matches for the regex value specified.
+
+    $self->content_type_like(qr/json/);
+    $self->content_type_like(qr/json/ => 'json data returned');
 
 =cut
 
@@ -514,13 +544,17 @@ sub content_type_like {
     my $name = 'Content-Type';
     $desc ||= "$name is similar";
     return $self->_test_more(
-        'like', $self->request->header($name), $regex, $desc
+        'like', $self->response->header($name), $regex, $desc
     );
 }
 
 =method content_type_unlike
 
-The content_type_unlike method tests ...
+The content_type_unlike method tests if the L<HTTP::Response> Content-Type
+header does not contain matches for the regex value specified.
+
+    $self->content_type_like(qr/json/);
+    $self->content_type_like(qr/json/ => 'json data returned');
 
 =cut
 
@@ -529,13 +563,17 @@ sub content_type_unlike {
     my $name = 'Content-Type';
     $desc ||= "$name is not similar";
     return $self->_test_more(
-        'unlike', $self->request->header($name), $regex, $desc
+        'unlike', $self->response->header($name), $regex, $desc
     );
 }
 
 =method header_is
 
-The header_is method tests ...
+The header_is method tests if the L<HTTP::Response> header specified matches
+the value specified.
+
+    $self->header_is('Server', 'nginx');
+    $self->header_is('Server', 'nginx' => 'server header ok');
 
 =cut
 
@@ -543,13 +581,17 @@ sub header_is {
     my ($self, $name, $value, $desc) = @_;
     $desc ||= "$name: " . ($value ? $value : '');
     return $self->_test_more(
-        'is', $self->request->header($name), $value, $desc
+        'is', $self->response->header($name), $value, $desc
     );
 }
 
 =method header_isnt
 
-The header_isnt method tests ...
+The header_isnt method tests if the L<HTTP::Response> header specified does not
+match the value specified.
+
+    $self->header_isnt('Server', 'nginx');
+    $self->header_isnt('Server', 'nginx' => 'server header not ok');
 
 =cut
 
@@ -557,13 +599,17 @@ sub header_isnt {
     my ($self, $name, $value, $desc) = @_;
     $desc ||= "not $name: " . ($value ? $value : '');
     return $self->_test_more(
-        'isnt', $self->request->header($name), $value, $desc
+        'isnt', $self->response->header($name), $value, $desc
     );
 }
 
 =method header_like
 
-The header_like method tests ...
+The header_like method tests if the L<HTTP::Response> header specified contains
+matches for the regex value specified.
+
+    $self->header_like('Server', qr/nginx/);
+    $self->header_like('Server', qr/nginx/ => 'server header ok');
 
 =cut
 
@@ -571,13 +617,17 @@ sub header_like {
     my ($self, $name, $regex, $desc) = @_;
     $desc ||= "$name is similar";
     return $self->_test_more(
-        'like', $self->request->header($name), $regex, $desc
+        'like', $self->response->header($name), $regex, $desc
     );
 }
 
 =method header_unlike
 
-The header_unlike method tests ...
+The header_unlike method tests if the L<HTTP::Response> header specified does
+not contain matches for the regex value specified.
+
+    $self->header_unlike('Server', qr/nginx/);
+    $self->header_unlike('Server', qr/nginx/ => 'server header not ok');
 
 =cut
 
@@ -585,13 +635,17 @@ sub header_unlike {
     my ($self, $name, $regex, $desc) = @_;
     $desc ||= "$name is not similar";
     return $self->_test_more(
-        'unlike', $self->request->header($name), $regex, $desc
+        'unlike', $self->response->header($name), $regex, $desc
     );
 }
 
 =method data_has
 
-The data_has method tests ...
+The data_has method tests if the L<HTTP::Response> decoded JSON structure
+contains matches for the L<Data::DPath> path value specified.
+
+    $self->data_has('/results');
+    $self->data_has('/results' => 'json results returned');
 
 =cut
 
@@ -606,7 +660,11 @@ sub data_has {
 
 =method data_hasnt
 
-The data_hasnt method tests ...
+The data_hasnt method tests if the L<HTTP::Response> decoded JSON structure
+does not contain matches for the L<Data::DPath> path value specified.
+
+    $self->data_hasnt('/results');
+    $self->data_hasnt('/results' => 'json results were not returned');
 
 =cut
 
@@ -621,7 +679,12 @@ sub data_hasnt {
 
 =method data_is_deeply
 
-The data_is_deeply method tests ...
+The data_is_deeply method tests if the L<HTTP::Response> decoded JSON structure
+contains matches for the L<Data::DPath> path value specified, then tests if
+the first match matches the supplied Perl data structure exactly.
+
+    $self->data_is_deeply('/results', $data);
+    $self->data_is_deeply('/results', $data => 'data structure exact match');
 
 =cut
 
@@ -638,7 +701,13 @@ sub data_is_deeply {
 
 =method data_match
 
-The data_match method tests ...
+The data_match method is an alias for the data_is_deeply method which tests if
+the L<HTTP::Response> decoded JSON structure contains matches for the
+L<Data::DPath> path value specified, then tests if the first match matches the
+supplied Perl data structure exactly.
+
+    $self->data_match('/results', $data);
+    $self->data_match('/results', $data => 'data structure exact match');
 
 =cut
 
@@ -648,7 +717,11 @@ sub data_match {
 
 =method status_is
 
-The status_is method tests ...
+The status_is method tests if the L<HTTP::Response> code matches the value
+specified.
+
+    $self->status_is(404);
+    $self->status_is(404 => 'page not found');
 
 =cut
 
@@ -662,7 +735,11 @@ sub status_is {
 
 =method status_isnt
 
-The status_isnt method tests ...
+The status_isnt method tests if the L<HTTP::Response> code does not match the
+value specified.
+
+    $self->status_isnt(404);
+    $self->status_isnt(404 => 'page found');
 
 =cut
 
@@ -672,14 +749,6 @@ sub status_isnt {
     return $self->_test_more(
         'isnt', $self->response->code, $code, $desc
     );
-}
-
-sub _test_more {
-    my ($self, $name, @args) = @_;
-    local $Test::Builder::Level = $Test::Builder::Level + 2;
-    Test::More->can($name)->(@args);
-
-    return $self;
 }
 
 sub _http_request {
@@ -700,6 +769,26 @@ sub _http_request {
     $self->_test_more('ok', $self->response && $self->request, $desc);
 
     return $self->response;
+}
+
+sub _reset_request_response {
+    my ($self) = @_;
+
+    my $req = HTTP::Request->new(uri => $self->request->uri);
+    my $res = HTTP::Response->new;
+
+    $self->request($req);
+    $self->response($res);
+
+    return $self;
+}
+
+sub _test_more {
+    my ($self, $name, @args) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 2;
+    Test::More->can($name)->(@args);
+
+    return $self;
 }
 
 1;

@@ -24,11 +24,13 @@ SYNOPSIS
         # setup
         $req->headers->authorization_basic('h@cker', 's3cret');
         $req->headers->content_type('application/json');
+        $req->content('');
 
-        # text request
-        $t->can_get('/search')->status_is(200);
+        # text GET request
+        $t->can_get('/')->status_is(200);
+        $t->content_like(qr/hello world/i);
 
-        # json request
+        # json POST request
         $t->can_post('/search')->status_is(200);
         $t->data_has('/results/4/title');
 
@@ -152,58 +154,134 @@ METHODS
         $self->cant_trace('/users' => 'http trace /users not ok');
 
   content_is
-    The content_is method tests ...
+    The content_is method tests if the HTTP::Response decoded body matches
+    the value specified.
+
+        $self->content_is($value);
+        $self->content_is($value => 'body ok');
 
   content_isnt
-    The content_isnt method tests ...
+    The content_isnt method tests if the HTTP::Response decoded body does
+    not match the value specified.
+
+        $self->content_isnt($value);
+        $self->content_isnt($value => 'body not ok');
 
   content_like
-    The content_like method tests ...
+    The content_like method tests if the HTTP::Response decoded body
+    contains matches for the regex value specified.
+
+        $self->content_like(qr/body/);
+        $self->content_like(qr/body/ => 'body found');
 
   content_unlike
-    The content_unlike method tests ...
+    The content_unlike method tests if the HTTP::Response decoded body does
+    not contain matches for the regex value specified.
+
+        $self->content_isnt(qr/body/);
+        $self->content_is(qr/body/ => 'body not found');
 
   content_type_is
-    The content_type_is method tests ...
+    The content_type_is method tests if the HTTP::Response Content-Type
+    header matches the value specified.
+
+        $self->content_type_is('application/json');
+        $self->content_type_is('application/json' => 'json data returned');
 
   content_type_isnt
-    The content_type_isnt method tests ...
+    The content_type_isnt method tests if the HTTP::Response Content-Type
+    header does not match the value specified.
+
+        $self->content_type_isnt('application/json');
+        $self->content_type_isnt('application/json' => 'json data not returned');
 
   content_type_like
-    The content_type_like method tests ...
+    The content_type_like method tests if the HTTP::Response Content-Type
+    header contains matches for the regex value specified.
+
+        $self->content_type_like(qr/json/);
+        $self->content_type_like(qr/json/ => 'json data returned');
 
   content_type_unlike
-    The content_type_unlike method tests ...
+    The content_type_unlike method tests if the HTTP::Response Content-Type
+    header does not contain matches for the regex value specified.
+
+        $self->content_type_like(qr/json/);
+        $self->content_type_like(qr/json/ => 'json data returned');
 
   header_is
-    The header_is method tests ...
+    The header_is method tests if the HTTP::Response header specified
+    matches the value specified.
+
+        $self->header_is('Server', 'nginx');
+        $self->header_is('Server', 'nginx' => 'server header ok');
 
   header_isnt
-    The header_isnt method tests ...
+    The header_isnt method tests if the HTTP::Response header specified does
+    not match the value specified.
+
+        $self->header_isnt('Server', 'nginx');
+        $self->header_isnt('Server', 'nginx' => 'server header not ok');
 
   header_like
-    The header_like method tests ...
+    The header_like method tests if the HTTP::Response header specified
+    contains matches for the regex value specified.
+
+        $self->header_like('Server', qr/nginx/);
+        $self->header_like('Server', qr/nginx/ => 'server header ok');
 
   header_unlike
-    The header_unlike method tests ...
+    The header_unlike method tests if the HTTP::Response header specified
+    does not contain matches for the regex value specified.
+
+        $self->header_unlike('Server', qr/nginx/);
+        $self->header_unlike('Server', qr/nginx/ => 'server header not ok');
 
   data_has
-    The data_has method tests ...
+    The data_has method tests if the HTTP::Response decoded JSON structure
+    contains matches for the Data::DPath path value specified.
+
+        $self->data_has('/results');
+        $self->data_has('/results' => 'json results returned');
 
   data_hasnt
-    The data_hasnt method tests ...
+    The data_hasnt method tests if the HTTP::Response decoded JSON structure
+    does not contain matches for the Data::DPath path value specified.
+
+        $self->data_hasnt('/results');
+        $self->data_hasnt('/results' => 'json results were not returned');
 
   data_is_deeply
-    The data_is_deeply method tests ...
+    The data_is_deeply method tests if the HTTP::Response decoded JSON
+    structure contains matches for the Data::DPath path value specified,
+    then tests if the first match matches the supplied Perl data structure
+    exactly.
+
+        $self->data_is_deeply('/results', $data);
+        $self->data_is_deeply('/results', $data => 'data structure exact match');
 
   data_match
-    The data_match method tests ...
+    The data_match method is an alias for the data_is_deeply method which
+    tests if the HTTP::Response decoded JSON structure contains matches for
+    the Data::DPath path value specified, then tests if the first match
+    matches the supplied Perl data structure exactly.
+
+        $self->data_match('/results', $data);
+        $self->data_match('/results', $data => 'data structure exact match');
 
   status_is
-    The status_is method tests ...
+    The status_is method tests if the HTTP::Response code matches the value
+    specified.
+
+        $self->status_is(404);
+        $self->status_is(404 => 'page not found');
 
   status_isnt
-    The status_isnt method tests ...
+    The status_isnt method tests if the HTTP::Response code does not match
+    the value specified.
+
+        $self->status_isnt(404);
+        $self->status_isnt(404 => 'page found');
 
 AUTHOR
     Al Newkirk <anewkirk@ana.io>

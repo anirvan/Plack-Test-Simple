@@ -27,11 +27,13 @@ are now even easier to test along-side the actual web application code.
     # setup
     $req->headers->authorization_basic('h@cker', 's3cret');
     $req->headers->content_type('application/json');
+    $req->content('');
 
-    # text request
-    $t->can_get('/search')->status_is(200);
+    # text GET request
+    $t->can_get('/')->status_is(200);
+    $t->content_like(qr/hello world/i);
 
-    # json request
+    # json POST request
     $t->can_post('/search')->status_is(200);
     $t->data_has('/results/4/title');
 
@@ -176,75 +178,150 @@ a success.
 
 ## content\_is
 
-The content\_is method tests ...
+The content\_is method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded body matches the
+value specified.
+
+    $self->content_is($value);
+    $self->content_is($value => 'body ok');
 
 ## content\_isnt
 
-The content\_isnt method tests ...
+The content\_isnt method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded body does not
+match the value specified.
+
+    $self->content_isnt($value);
+    $self->content_isnt($value => 'body not ok');
 
 ## content\_like
 
-The content\_like method tests ...
+The content\_like method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded body contains
+matches for the regex value specified.
+
+    $self->content_like(qr/body/);
+    $self->content_like(qr/body/ => 'body found');
 
 ## content\_unlike
 
-The content\_unlike method tests ...
+The content\_unlike method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded body does not
+contain matches for the regex value specified.
+
+    $self->content_isnt(qr/body/);
+    $self->content_is(qr/body/ => 'body not found');
 
 ## content\_type\_is
 
-The content\_type\_is method tests ...
+The content\_type\_is method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) Content-Type header
+matches the value specified.
+
+    $self->content_type_is('application/json');
+    $self->content_type_is('application/json' => 'json data returned');
 
 ## content\_type\_isnt
 
-The content\_type\_isnt method tests ...
+The content\_type\_isnt method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) Content-Type
+header does not match the value specified.
+
+    $self->content_type_isnt('application/json');
+    $self->content_type_isnt('application/json' => 'json data not returned');
 
 ## content\_type\_like
 
-The content\_type\_like method tests ...
+The content\_type\_like method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) Content-Type
+header contains matches for the regex value specified.
+
+    $self->content_type_like(qr/json/);
+    $self->content_type_like(qr/json/ => 'json data returned');
 
 ## content\_type\_unlike
 
-The content\_type\_unlike method tests ...
+The content\_type\_unlike method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) Content-Type
+header does not contain matches for the regex value specified.
+
+    $self->content_type_like(qr/json/);
+    $self->content_type_like(qr/json/ => 'json data returned');
 
 ## header\_is
 
-The header\_is method tests ...
+The header\_is method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) header specified matches
+the value specified.
+
+    $self->header_is('Server', 'nginx');
+    $self->header_is('Server', 'nginx' => 'server header ok');
 
 ## header\_isnt
 
-The header\_isnt method tests ...
+The header\_isnt method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) header specified does not
+match the value specified.
+
+    $self->header_isnt('Server', 'nginx');
+    $self->header_isnt('Server', 'nginx' => 'server header not ok');
 
 ## header\_like
 
-The header\_like method tests ...
+The header\_like method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) header specified contains
+matches for the regex value specified.
+
+    $self->header_like('Server', qr/nginx/);
+    $self->header_like('Server', qr/nginx/ => 'server header ok');
 
 ## header\_unlike
 
-The header\_unlike method tests ...
+The header\_unlike method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) header specified does
+not contain matches for the regex value specified.
+
+    $self->header_unlike('Server', qr/nginx/);
+    $self->header_unlike('Server', qr/nginx/ => 'server header not ok');
 
 ## data\_has
 
-The data\_has method tests ...
+The data\_has method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded JSON structure
+contains matches for the [Data::DPath](http://search.cpan.org/perldoc?Data::DPath) path value specified.
+
+    $self->data_has('/results');
+    $self->data_has('/results' => 'json results returned');
 
 ## data\_hasnt
 
-The data\_hasnt method tests ...
+The data\_hasnt method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded JSON structure
+does not contain matches for the [Data::DPath](http://search.cpan.org/perldoc?Data::DPath) path value specified.
+
+    $self->data_hasnt('/results');
+    $self->data_hasnt('/results' => 'json results were not returned');
 
 ## data\_is\_deeply
 
-The data\_is\_deeply method tests ...
+The data\_is\_deeply method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded JSON structure
+contains matches for the [Data::DPath](http://search.cpan.org/perldoc?Data::DPath) path value specified, then tests if
+the first match matches the supplied Perl data structure exactly.
+
+    $self->data_is_deeply('/results', $data);
+    $self->data_is_deeply('/results', $data => 'data structure exact match');
 
 ## data\_match
 
-The data\_match method tests ...
+The data\_match method is an alias for the data\_is\_deeply method which tests if
+the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) decoded JSON structure contains matches for the
+[Data::DPath](http://search.cpan.org/perldoc?Data::DPath) path value specified, then tests if the first match matches the
+supplied Perl data structure exactly.
+
+    $self->data_match('/results', $data);
+    $self->data_match('/results', $data => 'data structure exact match');
 
 ## status\_is
 
-The status\_is method tests ...
+The status\_is method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) code matches the value
+specified.
+
+    $self->status_is(404);
+    $self->status_is(404 => 'page not found');
 
 ## status\_isnt
 
-The status\_isnt method tests ...
+The status\_isnt method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) code does not match the
+value specified.
+
+    $self->status_isnt(404);
+    $self->status_isnt(404 => 'page found');
 
 # AUTHOR
 
