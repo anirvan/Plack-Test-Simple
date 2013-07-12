@@ -13,6 +13,8 @@ use Moo;
 
 use utf8;
 
+# VERSION
+
 =head1 SYNOPSIS
 
     use Test::More;
@@ -553,8 +555,8 @@ sub content_type_like {
 The content_type_unlike method tests if the L<HTTP::Response> Content-Type
 header does not contain matches for the regex value specified.
 
-    $self->content_type_like(qr/json/);
-    $self->content_type_like(qr/json/ => 'json data returned');
+    $self->content_type_unlike(qr/json/);
+    $self->content_type_unlike(qr/json/ => 'json data not returned');
 
 =cut
 
@@ -785,6 +787,7 @@ sub _reset_request_response {
 
 sub _test_more {
     my ($self, $name, @args) = @_;
+
     local $Test::Builder::Level = $Test::Builder::Level + 2;
     Test::More->can($name)->(@args);
 
