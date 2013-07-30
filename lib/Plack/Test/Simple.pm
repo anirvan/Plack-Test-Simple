@@ -760,6 +760,7 @@ sub _http_request {
     $path ||= '/';
     $desc ||= "got response for $method $path";
 
+    $self->request->remove_header('Content-Length'); # reset
     $self->request->method($method);
     $self->request->uri->path($path);
 

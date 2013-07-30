@@ -15,5 +15,6 @@ my $res = $t->response;
 $req->headers->authorization_basic('h@cker', 's3cret');
 $req->headers->content_type('application/json');
 
-$t->can_get('/')->status_is(200)->data_is_deeply('/server_name' => 'localhost');
+$t->can_get('/')->status_is(200)->data_is_deeply('/request_uri' => '/');
+
 done_testing;
