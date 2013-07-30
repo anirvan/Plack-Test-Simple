@@ -4,7 +4,7 @@ Plack::Test::Simple - Object-Oriented PSGI Application Testing
 
 # VERSION
 
-version 0.000001
+version 0.000002
 
 # SYNOPSIS
 
@@ -237,8 +237,8 @@ header contains matches for the regex value specified.
 The content\_type\_unlike method tests if the [HTTP::Response](http://search.cpan.org/perldoc?HTTP::Response) Content-Type
 header does not contain matches for the regex value specified.
 
-    $self->content_type_like(qr/json/);
-    $self->content_type_like(qr/json/ => 'json data returned');
+    $self->content_type_unlike(qr/json/);
+    $self->content_type_unlike(qr/json/ => 'json data not returned');
 
 ## header\_is
 

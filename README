@@ -2,7 +2,7 @@ NAME
     Plack::Test::Simple - Object-Oriented PSGI Application Testing
 
 VERSION
-    version 0.000001
+    version 0.000002
 
 SYNOPSIS
     Plack::Test::Simple is a collection of testing helpers for anyone
@@ -206,8 +206,8 @@ METHODS
     The content_type_unlike method tests if the HTTP::Response Content-Type
     header does not contain matches for the regex value specified.
 
-        $self->content_type_like(qr/json/);
-        $self->content_type_like(qr/json/ => 'json data returned');
+        $self->content_type_unlike(qr/json/);
+        $self->content_type_unlike(qr/json/ => 'json data not returned');
 
   header_is
     The header_is method tests if the HTTP::Response header specified

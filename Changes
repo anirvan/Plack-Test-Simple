@@ -1,10 +1,32 @@
 ==================================================
-Changes from 2012-07-12 00:00:00 +0000 to present.
+Changes from 2012-07-30 00:00:00 +0000 to present.
 ==================================================
 
 ---------------------------------------------
-version 0.000001 at 2013-07-12 08:05:17 +0000
+version 0.000002 at 2013-07-30 01:54:42 +0000
 ---------------------------------------------
+
+  Change: c46c653dc53eaf754b3f0f4c5721794658032ba1
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-29 21:54:28 +0000
+
+    reset content-length before each request 
+
+  Change: 98b92df9386882bc01e272f77131d5d1d2fa5b74
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-12 04:33:12 +0000
+
+    added version number to main module 
+
+---------------------------------------------
+version 0.000001 at 2013-07-12 08:06:25 +0000
+---------------------------------------------
+
+  Change: 1ec0caa514469ec80d31e6b800fb617efa556e28
+  Author: Al Newkirk <anewkirk@ana.io>
+  Date : 2013-07-12 04:06:25 +0000
+
+    v0.000001 
 
   Change: 2edb972393e3f1b3163e2fccb0ce8a9cfd32f188
   Author: Al Newkirk <anewkirk@ana.io>
