@@ -2,7 +2,7 @@ NAME
     Plack::Test::Simple - Object-Oriented PSGI Application Testing
 
 VERSION
-    version 0.000002
+    version 0.000003
 
 SYNOPSIS
     Plack::Test::Simple is a collection of testing helpers for anyone
