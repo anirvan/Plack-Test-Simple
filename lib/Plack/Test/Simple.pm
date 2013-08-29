@@ -27,14 +27,8 @@ use JSON qw(encode_json);
     $req->headers->content_type('application/json');
 
     # standard GET request test
-    my $tx = $t->transaction('get', '/', 'test description');
-
-    # shorthand GET request test
-    my $tx = $t->get_returns_200('/', 'test description');
-    $tx->content_like(qr/hello world/i, 'test description');
-
-    # shorthand POST request
-    my $tx = $t->post_returns_200('/search', {}, 'test description');
+    # automatic JSON serialization if content-body is a hash/array reference
+    my $tx = $t->transaction('get', '/search?q=awesomeness', 'content body');
     $tx->data_has('/results/4/title', 'test description');
 
     done_testing;
@@ -96,12 +90,12 @@ object is needed, this allows you to further modify the transactions HTTP
 request object before it is processed. This method optionally accepts an HTTP
 request method, a request path (or URI object), and content (any string) you
 wish to place in the body of the request. If the content body argument is a
-Perl object, we will attempt to encode and serialize it automatically using
-JSON. These parameters are used to further modify the transaction's request
-object. Please see the L<Plack::Test::Simple::Transaction> for more information
-on how to use the transaction object to further automate tests.
+hash/array reference, we will attempt to encode and serialize it automatically
+as a JSON object. These parameters are used to further modify the transaction's
+request object. Please see L<Plack::Test::Simple::Transaction> for more
+information on how to use the transaction object to further automate tests.
 
-    my $tx = $self->transaction('post', '/?query=Perl', 'content body');
+    my $tx = $self->transaction('post', '/path/to/resource', 'content body');
 
 =cut
 
@@ -138,7 +132,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->connect_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -161,7 +155,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->delete_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -184,7 +178,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->get_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -207,7 +201,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->head_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -230,7 +224,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->options_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -253,7 +247,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->patch_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -276,7 +270,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->post_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -299,7 +293,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->put_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
@@ -322,7 +316,7 @@ represents any valid HTTP response code, e.g. 200.
         '/path/to/resource', 'content body'
     );
 
-    # with content body included
+    # with content body and status test description included
     my $tx = $self->trace_returns_200(
         '/path/to/resource', 'content body', 'test description'
     );
