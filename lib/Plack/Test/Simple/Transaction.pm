@@ -18,10 +18,10 @@ use Data::DPath qw(dpath);
     use Plack::Test::Simple::Transaction;
 
     # prepare test container
-    my $tx = Plack::Test::Simple::Transaction->new('/path/to/app.psgi');
+    my $tx  = Plack::Test::Simple::Transaction->new('/path/to/app.psgi');
+    my $req = $tx->request;
 
     # get request setup
-    my $req = $tx->request;
     $req->method('GET');
     $request->uri(URI->new('/path/to/resource'));
     $req->headers->authorization_basic('h@cker', 's3cret');
