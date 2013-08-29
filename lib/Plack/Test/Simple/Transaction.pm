@@ -7,7 +7,7 @@ use HTTP::Response;
 use URI;
 use Moo;
 use Plack::Util;
-use JSON        qw(encode_json decode_json);
+use JSON        qw(decode_json);
 use Test::More  qw();
 use Plack::Test qw();
 use Data::DPath qw(dpath);

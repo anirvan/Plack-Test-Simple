@@ -9,6 +9,7 @@ use URI;
 use Moo;
 use Plack::Util;
 use Plack::Test::Simple::Transaction;
+use JSON qw(encode_json);
 
 # VERSION
 
@@ -94,13 +95,13 @@ the HTTP transaction. The actually HTTP request is deferred until the response
 object is needed, this allows you to further modify the transactions HTTP
 request object before it is processed. This method optionally accepts an HTTP
 request method, a request path (or URI object), and content (any string) you
-wish to place in the body of the request.
+wish to place in the body of the request. If the content body argument is a
+Perl object, we will attempt to encode and serialize it automatically using
+JSON. These parameters are used to further modify the transaction's request
+object. Please see the L<Plack::Test::Simple::Transaction> for more information
+on how to use the transaction object to further automate tests.
 
-These parameters are used to further modify the transaction's request object.
-Please see the L<Plack::Test::Simple::Transaction> for more information on how
-to use the transaction object to further automate tests.
-
-    my $tx = $self->transaction('post', '/?query=Perl', $content);
+    my $tx = $self->transaction('post', '/?query=Perl', 'content body');
 
 =cut
 
@@ -117,7 +118,10 @@ sub transaction {
 
     $trans->request->method(uc $meth);
     $trans->request->uri(URI->new($path));
-    $trans->request->content($cont);
+
+    if (defined $cont) {
+        $trans->request->content(ref $cont ? encode_json($cont) : $cont);
+    }
 
     return $trans;
 }
@@ -130,7 +134,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->connect_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->connect_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->connect_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('connect', '/path/to/resource');
@@ -146,7 +157,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->delete_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->delete_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->delete_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('delete', '/path/to/resource');
@@ -162,7 +180,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->get_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->get_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->get_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('get', '/path/to/resource');
@@ -178,7 +203,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->head_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->head_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->head_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('head', '/path/to/resource');
@@ -194,7 +226,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->options_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->options_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->options_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('options', '/path/to/resource');
@@ -210,7 +249,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->patch_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->patch_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->patch_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('patch', '/path/to/resource');
@@ -226,7 +272,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->post_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->post_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->post_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('post', '/path/to/resource');
@@ -242,7 +295,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->put_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->put_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->put_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('put', '/path/to/resource');
@@ -258,7 +318,14 @@ request is made and the server's HTTP response code is tested to ensure it
 returns a CODE. The CODE in this method description is a variable which
 represents any valid HTTP response code, e.g. 200.
 
-    my $tx = $self->trace_returns_200('/path/to/resource', 'test description');
+    my $tx = $self->trace_returns_200(
+        '/path/to/resource', 'content body'
+    );
+
+    # with content body included
+    my $tx = $self->trace_returns_200(
+        '/path/to/resource', 'content body', 'test description'
+    );
 
     # shorthand for
     my $tx = $self->transaction('trace', '/path/to/resource');
@@ -270,10 +337,9 @@ sub AUTOLOAD {
     my ($self, @args)  = @_;
     my @cmds = split /_/, ($Plack::Test::Simple::AUTOLOAD =~ /.*::([^:]+)/)[0];
 
-    return  @args >= 3 ?
-        # positional arguments
-        $self->transaction($cmds[0], @args)->status_is($cmds[2], $args[2]) :
-        $self->transaction($cmds[0], $args[0])->status_is($cmds[2], $args[1])
+    return $self->transaction($cmds[0], @args[0,1])->status_is(
+            $cmds[2], $args[2]
+        )
         if  @cmds == 3
         && $cmds[0] =~ /^(get|post|put|delete|head|options|connect|patch|trace)$/
         && $cmds[1] eq 'returns'

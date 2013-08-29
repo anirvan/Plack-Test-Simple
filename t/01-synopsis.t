@@ -23,4 +23,12 @@ $tx1->data_match('/request_uri', '/');
 my $tx2 = $t->get_returns_200('/');
 $tx2->data_match('/request_uri', '/');
 
+# shorthand POST request test with content
+my $tx3 = $t->post_returns_200('/', 'blah');
+$tx3->data_match('/request_uri', '/');
+
+# shorthand POST request test with serialization
+my $tx4 = $t->post_returns_200('/', {a => 1});
+$tx4->data_match('/request_uri', '/');
+
 done_testing;
