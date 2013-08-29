@@ -3,12 +3,12 @@ Changes from 2012-08-29 00:00:00 +0000 to present.
 ==================================================
 
 ---------------------------------------------
-version 0.000006 at 2013-08-29 05:57:51 +0000
+version 0.000006 at 2013-08-29 05:59:04 +0000
 ---------------------------------------------
 
-  Change: e071d5299600c3b583fa8a96032e55985f6b11df
+  Change: a989b916f88d91e5bd98adc5171b5d9168bdb5a2
   Author: Al Newkirk <anewkirk@ana.io>
-  Date : 2013-08-29 01:56:55 +0000
+  Date : 2013-08-29 01:58:44 +0000
 
     automatic serialization of Perl data structures into the request content
     body 
