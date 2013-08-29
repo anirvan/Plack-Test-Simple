@@ -7,14 +7,20 @@ use Test::More;
 
 use_ok 'Plack::Test::Simple';
 
-my $t   = Plack::Test::Simple->new($FindBin::RealBin.'/apps/env.psgi');
-my $req = $t->request;
-my $res = $t->response;
+# prepare test container
+my $t  = Plack::Test::Simple->new($FindBin::RealBin.'/apps/env.psgi');
 
-# setup
+# global request configuration
+my $req = $t->request;
 $req->headers->authorization_basic('h@cker', 's3cret');
 $req->headers->content_type('application/json');
 
-$t->can_get('/')->status_is(200)->data_is_deeply('/request_uri' => '/');
+# standard GET request test
+my $tx1 = $t->transaction('get', '/')->status_is(200);
+$tx1->data_match('/request_uri', '/');
+
+# shorthand GET request test
+my $tx2 = $t->get_returns_200('/');
+$tx2->data_match('/request_uri', '/');
 
 done_testing;

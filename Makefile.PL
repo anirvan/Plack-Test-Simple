@@ -26,13 +26,15 @@ my %WriteMakefileArgs = (
     "HTTP::Response" => 0,
     "JSON" => 0,
     "Moo" => 0,
-    "Plack" => 0,
-    "Plack::Test" => 0,
+    "Plack" => "1.0029",
     "Test::More" => 0,
     "URI" => 0
   },
-  "TEST_REQUIRES" => {},
-  "VERSION" => "0.000003",
+  "TEST_REQUIRES" => {
+    "Plack" => "1.0029",
+    "Test::More" => 0
+  },
+  "VERSION" => "0.000004",
   "test" => {
     "TESTS" => "t/*.t"
   }
