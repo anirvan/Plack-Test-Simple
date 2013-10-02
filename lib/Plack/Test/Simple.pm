@@ -15,7 +15,7 @@ use JSON qw(encode_json);
 
 =head1 SYNOPSIS
 
-    Test::More;
+    use Test::More;
     use Plack::Test::Simple;
 
     # prepare test container
